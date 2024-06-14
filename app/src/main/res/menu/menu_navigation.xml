@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuProfile"
+        android:icon="@drawable/profile_user"
+        android:title="Profil" />
+
+    <item
+        android:id="@+id/menuKalorien"
+        android:icon="@drawable/kalorien_tracker"
+        android:title="Kalorientracker" />
+
+    <item
+        android:id="@+id/menuPlan"
+        android:icon="@drawable/plan_training"
+        android:title="Trainingsplan" />
+
+    <item
+        android:id="@+id/menuZiele"
+        android:icon="@drawable/ziele"
+        android:title="Zielsetzer" />
+
+    <item
+        android:id="@+id/menuZaehler"
+        android:icon="@drawable/schritt_zaehler"
+        android:title="Schrittzähler" />
+
+    <item
+        android:title="Sonstige">
+
+        <menu>
+
+            <item
+                android:id="@+id/menuAbmelden"
+                android:icon="@drawable/logout"
+                android:title="Abmelden"/>
+        </menu>
+    </item>
+
+</menu>
