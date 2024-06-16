@@ -1,8 +1,9 @@
 package at.htlwels.austrofit;
 
-import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.TabHost;
+import android.widget.TabHost.OnTabChangeListener;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -39,6 +40,16 @@ public class MainActivity extends AppCompatActivity {
         specs.setContent(R.id.tabZiele);
         specs.setIndicator("Ziele");
         th.addTab(specs);
+
+        th.setOnTabChangedListener(new OnTabChangeListener() {
+            @Override
+            public void onTabChanged(String tabId) {
+                if ("Tag1".equals(tabId)) {
+                    Intent intent = new Intent(MainActivity.this, TrainingsPlanActivity.class);
+                    startActivity(intent);
+                }
+            }
+        });
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());

@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+    <EditText
+        android:id="@+id/planName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Plan Name" />
+
+    <Spinner
+        android:id="@+id/daySpinner"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+
+    <EditText
+        android:id="@+id/uebungName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Übung Name" />
+
+    <EditText
+        android:id="@+id/uebungMuskel"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Muskelgruppe" />
+
+    <EditText
+        android:id="@+id/uebungSaetze"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Sätze" />
+
+    <EditText
+        android:id="@+id/uebungWiederholungen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Wiederholungen" />
+
+    <EditText
+        android:id="@+id/uebungGewicht"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Gewicht (kg)" />
+
+    <Button
+        android:id="@+id/addUebungButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Übung hinzufügen" />
+
+    <LinearLayout
+        android:id="@+id/uebungListLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" />
+
+    <Button
+        android:id="@+id/savePlanButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Plan speichern" />
+</LinearLayout>

@@ -1,3 +1,12 @@
 <resources>
     <string name="app_name">AustroFit</string>
+    <string-array name="days_array">
+        <item>Tag 1</item>
+        <item>Tag 2</item>
+        <item>Tag 3</item>
+        <item>Tag 4</item>
+        <item>Tag 5</item>
+        <item>Tag 6</item>
+        <item>Tag 7</item>
+    </string-array>
 </resources>
