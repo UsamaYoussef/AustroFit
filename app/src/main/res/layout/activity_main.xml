@@ -52,9 +52,103 @@
                     android:id="@+id/tabZaehler"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
+                    android:orientation="vertical"
+                    android:padding="16dp"
+                    android:background="@drawable/ic_launcher_background">
 
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Schrittzähler"
+                        android:layout_gravity="center"
+                        android:padding="20dp"
+                        android:layout_marginBottom="10dp"
+                        android:textSize="50sp"
+                        android:textColor="@color/black"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:id="@+id/stepCountTargetTextView"
+                        android:layout_marginTop="8dp"
+                        android:textColor="@color/black"
+                        android:textSize="20sp"
+                        android:text="Schritt Ziel: 6000" />
+
+                    <ProgressBar
+                        android:id="@+id/progressBar"
+                        style="?android:attr/progressBarStyleHorizontal"
+                        android:layout_width="130dp"
+                        android:layout_height="160dp"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="16dp"
+                        android:background="@drawable/circular"
+                        android:padding="10dp"
+                        android:progressDrawable="@drawable/custom_progress" />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="79dp"
+                            android:layout_height="96dp" />
+
+                        <TextView
+                            android:id="@+id/stepCountTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:text="Schritte: 0"
+                            android:padding="20dp"
+                            android:textSize="24sp"
+                            android:textColor="@color/black"
+                            android:layout_gravity="center" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="79dp"
+                            android:layout_height="96dp" />
+
+                        <TextView
+                            android:id="@+id/distanceTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="20dp"
+                            android:text="Distanz: 0"
+                            android:textColor="@color/black"
+                            android:textSize="24sp" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal">
+
+                        <ImageView
+                            android:layout_width="79dp"
+                            android:layout_height="96dp" />
+
+                        <TextView
+                            android:id="@+id/timeTextView"
+                            android:layout_width="wrap_content"
+                            android:layout_height="match_parent"
+                            android:layout_gravity="center"
+                            android:padding="20dp"
+                            android:text="Zeit: 0"
+                            android:textColor="@color/black"
+                            android:textSize="24sp" />
+                    </LinearLayout>
                 </LinearLayout>
+
 
                 <LinearLayout
                     android:id="@+id/tabZiele"
@@ -65,5 +159,6 @@
                 </LinearLayout>
             </FrameLayout>
         </LinearLayout>
+
     </TabHost>
 </androidx.constraintlayout.widget.ConstraintLayout>

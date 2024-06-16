@@ -1,6 +1,5 @@
 package at.htlwels.austrofit;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.TabHost;
 
@@ -12,13 +11,15 @@ import androidx.core.view.WindowInsetsCompat;
 
 public class MainActivity extends AppCompatActivity {
 
+    private Schrittzaehler schrittzaehler;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        TabHost th = (TabHost) findViewById(R.id.tabHost);
+        TabHost th = findViewById(R.id.tabHost);
         th.setup();
         TabHost.TabSpec specs = th.newTabSpec("Tag1");
         specs.setContent(R.id.tabPlan);
@@ -45,5 +46,19 @@ public class MainActivity extends AppCompatActivity {
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
         });
+
+        schrittzaehler = new Schrittzaehler(this, findViewById(R.id.tabZaehler));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        schrittzaehler.resume();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        schrittzaehler.stop();
     }
 }
