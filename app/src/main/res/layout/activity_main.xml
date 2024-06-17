@@ -29,8 +29,20 @@
                     android:id="@+id/tabPlan"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical">
-                    <!-- Content for Planer Tab -->
+                    android:orientation="vertical"
+                    android:padding="16dp">
+
+                    <Button
+                        android:id="@+id/createNewPlanButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Neuen Plan erstellen" />
+
+                    <Button
+                        android:id="@+id/viewSavedPlansButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Gespeicherte Pläne anzeigen" />
                 </LinearLayout>
 
                 <LinearLayout

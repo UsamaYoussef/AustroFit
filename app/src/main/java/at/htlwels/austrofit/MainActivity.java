@@ -2,6 +2,7 @@ package at.htlwels.austrofit;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.widget.Button;
 import android.widget.TabHost;
 import android.widget.TabHost.OnTabChangeListener;
 
@@ -19,7 +20,7 @@ public class MainActivity extends AppCompatActivity {
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
 
-        TabHost th = (TabHost) findViewById(R.id.tabHost);
+        TabHost th = findViewById(R.id.tabHost);
         th.setup();
         TabHost.TabSpec specs = th.newTabSpec("Tag1");
         specs.setContent(R.id.tabPlan);
@@ -44,10 +45,7 @@ public class MainActivity extends AppCompatActivity {
         th.setOnTabChangedListener(new OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
-                if ("Tag1".equals(tabId)) {
-                    Intent intent = new Intent(MainActivity.this, TrainingsPlanActivity.class);
-                    startActivity(intent);
-                }
+                // Keine Aktion erforderlich
             }
         });
 
@@ -55,6 +53,19 @@ public class MainActivity extends AppCompatActivity {
             Insets systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars());
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom);
             return insets;
+        });
+
+        Button createNewPlanButton = findViewById(R.id.createNewPlanButton);
+        Button viewSavedPlansButton = findViewById(R.id.viewSavedPlansButton);
+
+        createNewPlanButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, TrainingsPlanActivity.class);
+            startActivity(intent);
+        });
+
+        viewSavedPlansButton.setOnClickListener(v -> {
+            Intent intent = new Intent(MainActivity.this, TrainingsPlanListActivity.class);
+            startActivity(intent);
         });
     }
 }

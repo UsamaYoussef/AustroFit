@@ -1,5 +1,6 @@
 package at.htlwels.austrofit;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
@@ -102,6 +103,11 @@ public class TrainingsPlanActivity extends AppCompatActivity {
             editor.apply();
 
             Toast.makeText(this, "Trainingsplan gespeichert", Toast.LENGTH_SHORT).show();
+
+            // Zurück zur Planer-Übersichtsseite
+            Intent intent = new Intent(TrainingsPlanActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
         });
     }
 
