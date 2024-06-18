@@ -18,5 +18,4 @@
         android:layout_marginLeft="8dp"
         android:text="Goal Name"
         android:textSize="18sp" />
-
 </LinearLayout>
