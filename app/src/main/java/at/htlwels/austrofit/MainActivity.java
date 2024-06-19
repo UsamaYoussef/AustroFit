@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements GoalAdapter.OnGoa
         Button addButton = findViewById(R.id.button_add);
         Button deleteButton = findViewById(R.id.button_delete);
         Button editButton = findViewById(R.id.button_edit);
-        newGoalEditText = findViewById(R.id.newGoal);
+        newGoalEditText = findViewById(R.id.new_goal);
 
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
