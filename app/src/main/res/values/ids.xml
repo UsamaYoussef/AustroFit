@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="savePlanButton" type="id" />
+    <item name="uebungListLayout" type="id" />
+    <item name="addUebungButton" type="id" />
+    <item name="uebungGewicht" type="id" />
+    <item name="uebungWiederholungen" type="id" />
+    <item name="uebungSaetze" type="id" />
+    <item name="uebungMuskel" type="id" />
+    <item name="uebungName" type="id" />
+    <item name="daySpinner" type="id" />
+    <item name="planName" type="id" />
+</resources>

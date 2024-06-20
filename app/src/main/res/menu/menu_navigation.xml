@@ -7,22 +7,22 @@
         android:title="Profil" />
 
     <item
-        android:id="@+id/menuKalorien"
+        android:id="@+id/menuCaloriesTracker"
         android:icon="@drawable/kalorien_tracker"
         android:title="Kalorientracker" />
 
     <item
-        android:id="@+id/menuPlan"
+        android:id="@+id/menuTrainingPlan"
         android:icon="@drawable/plan_training"
         android:title="Trainingsplan" />
 
     <item
-        android:id="@+id/menuZiele"
+        android:id="@+id/menuGoalSetting"
         android:icon="@drawable/ziele"
         android:title="Zielsetzer" />
 
     <item
-        android:id="@+id/menuZaehler"
+        android:id="@+id/menuStepCounter"
         android:icon="@drawable/schritt_zaehler"
         android:title="Schrittzähler" />
 
@@ -32,7 +32,7 @@
         <menu>
 
             <item
-                android:id="@+id/menuAbmelden"
+                android:id="@+id/menuLogOut"
                 android:icon="@drawable/logout"
                 android:title="Abmelden"/>
         </menu>

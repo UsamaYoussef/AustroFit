@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.preference.PreferenceManager;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -21,9 +22,10 @@ import org.json.JSONObject;
 
 public class LogIn extends AppCompatActivity {
 
-    TextInputEditText textInputEditTextUsername, textInputEditTextPasswd;
-    Button buttonLogIn;
-    TextView textViewSignUp;
+    // UI-Elemente deklarieren
+    private TextInputEditText textInputEditTextUsername, textInputEditTextPasswd;
+    private Button buttonLogIn;
+    private TextView textViewSignUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,64 +39,65 @@ public class LogIn extends AppCompatActivity {
             // Wenn der Benutzer angemeldet ist, starte die MainActivity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-            finish();
+            finish(); // Schließe die aktuelle Aktivität
         } else {
             // Wenn der Benutzer nicht angemeldet ist, starte die LogInActivity
             setContentView(R.layout.activity_login);
         }
 
-        textInputEditTextUsername = findViewById(R.id.usernameLogIn);
-        textInputEditTextPasswd = findViewById(R.id.passwdLogIn);
+        // UI-Elemente mit ihren XML-IDs verbinden
+        textInputEditTextUsername = findViewById(R.id.userNameLogIn);
+        textInputEditTextPasswd = findViewById(R.id.passwordLogin);
         buttonLogIn = findViewById(R.id.buttonLogIn);
-        textViewSignUp = findViewById(R.id.textSignUp);
+        textViewSignUp = findViewById(R.id.textViewSignUp);
 
+        // Klick-Listener für den Sign-Up-TextView
         textViewSignUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Starte die SignUp-Aktivität
                 Intent intent = new Intent(getApplicationContext(), SignUp.class);
                 startActivity(intent);
-                finish();
+                finish(); // Schließe die aktuelle Aktivität
             }
         });
 
+        // Klick-Listener für den Log-In-Button
         buttonLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String username, passwd;
-                username = String.valueOf(textInputEditTextUsername.getText());
-                passwd = String.valueOf(textInputEditTextPasswd.getText());
+                String username = String.valueOf(textInputEditTextUsername.getText());
+                String passwd = String.valueOf(textInputEditTextPasswd.getText());
 
                 if (!username.equals("") && !passwd.equals("")) {
                     Handler handler = new Handler(Looper.getMainLooper());
                     handler.post(new Runnable() {
                         @Override
                         public void run() {
-                            //Starting Write and Read data with URL
-                            //Creating array for parameters
                             String[] field = new String[2];
-                            field[0] = "benutzername";
-                            field[1] = "passwort";
-                            //Creating array for data
+                            field[0] = "userName";
+                            field[1] = "password";
+
                             String[] data = new String[2];
                             data[0] = username;
                             data[1] = passwd;
-                            PutData putData = new PutData("http://192.168.1.12/login/login.php", "POST", field, data);
+
+                            PutData putData = new PutData("http://172.17.77.221/login/login.php", "POST", field, data);
                             if (putData.startPut()) {
                                 if (putData.onComplete()) {
                                     String result = putData.getResult();
+                                    Log.d("LogInResponse", result); // Log die Antwort
                                     try {
                                         JSONObject jsonObject = new JSONObject(result);
                                         if (jsonObject.getString("status").equals("Login erfolgreich")) {
                                             Toast.makeText(getApplicationContext(), "Login erfolgreich", Toast.LENGTH_SHORT).show();
 
-                                            // Abrufen des Vor- und Nachnamens
-                                            String firstName = jsonObject.getString("vorname");
-                                            String lastName = jsonObject.getString("nachname");
+                                            String firstName = jsonObject.getString("firstName");
+                                            String lastName = jsonObject.getString("lastName");
 
-                                            // Speichere die Benutzerdaten in SharedPreferences
                                             SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(LogIn.this);
                                             SharedPreferences.Editor editor = sharedPreferences.edit();
-                                            editor.putString("username", username);
+                                            editor.putString("userName", username);
                                             editor.putString("firstName", firstName);
                                             editor.putString("lastName", lastName);
                                             editor.putBoolean("isLoggedIn", true);
@@ -112,7 +115,6 @@ public class LogIn extends AppCompatActivity {
                                     }
                                 }
                             }
-                            //End Write and Read data with URL
                         }
                     });
                 } else {

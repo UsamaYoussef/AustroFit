@@ -34,7 +34,7 @@
                 android:layout_marginTop="17dp"
                 android:layout_weight="1"
                 android:fontFamily="@font/days_one"
-                android:text="AustroFit"
+                android:text="Trainingsplan"
                 android:textAppearance="@style/TextAppearance.AppCompat.Display1"
                 android:textColor="#FFFFFF"
                 android:textSize="30sp" />
@@ -43,74 +43,51 @@
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_marginTop="100dp"
             android:orientation="vertical"
             android:padding="16dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <TextView
-                android:id="@+id/textViewFullName"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Full Name"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <TextView
-                android:id="@+id/textViewUsername"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Username"
-                android:textSize="16sp" />
-
             <EditText
-                android:id="@+id/editTextWeight"
+                android:id="@+id/editTextExercise"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:hint="Gewicht (kg)"
-                android:inputType="numberDecimal" />
+                android:hint="Übungsname" />
+
+            <EditText
+                android:id="@+id/editTextReps"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Wiederholungen"
+                android:inputType="number" />
+
+            <EditText
+                android:id="@+id/editTextSets"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Sätze"
+                android:inputType="number" />
+
+            <Spinner
+                android:id="@+id/spinnerDay"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
 
             <Button
-                android:id="@+id/buttonSaveWeight"
-                android:layout_width="wrap_content"
+                android:id="@+id/buttonSave"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Gewicht speichern" />
+                android:text="Speichern" />
 
-            <TextView
-                android:id="@+id/textViewCalories"
-                android:layout_width="wrap_content"
+            <Button
+                android:id="@+id/buttonShowTodayPlan"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Verbrauchte Kalorien heute:" />
+                android:text="Heutigen Plan anzeigen" />
 
-            <TextView
-                android:id="@+id/textViewSteps"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Zurückgelegte Schritte heute:" />
-
-            <TextView
-                android:id="@+id/textViewPlan"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Dein Trainingsplan:" />
-
-            <TextView
-                android:id="@+id/textViewGoals"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="Deine Ziele:" />
         </LinearLayout>
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

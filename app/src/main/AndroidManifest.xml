@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <uses-feature
+        android:name="android.hardware.sensor.stepcounter"
+        android:required="true" />
+    <uses-feature
+        android:name="android.hardware.sensor.stepdetector"
+        android:required="true" />
+
+    <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
@@ -13,6 +22,30 @@
         android:theme="@style/Theme.AustroFit"
         android:usesCleartextTraffic="true"
         tools:targetApi="31">
+        <activity
+            android:name=".GoalSettingActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TodayPlanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrainingPlanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrainingsPlanActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrainingsPlanDetailsActivity"
+            android:exported="false" />
+        <activity
+            android:name=".TrainingsPlanListActivity"
+            android:exported="false" />
+        <activity
+            android:name=".StepCounterActivity"
+            android:exported="false" />
+        <activity
+            android:name=".CaloriesTrackerActivity"
+            android:exported="false" />
         <activity
             android:name=".WelcomeActivity"
             android:exported="true">

@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,15 +20,18 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+import java.util.ArrayList;
 
-public class MainActivity extends AppCompatActivity {
+public class GoalSettingActivity extends AppCompatActivity {
 
-    private TextView textViewFullName, textViewUsername, textViewCalories, textViewSteps, textViewPlan, textViewGoals;
-    private EditText editTextWeight;
-    private Button buttonSaveWeight;
+    // UI-Elemente deklarieren
+    private EditText editTextGoal;
+    private Button buttonAddGoal;
+    private ListView listViewGoals;
+
+    // Liste zur Speicherung der Ziele
+    private ArrayList<String> goalList;
+    private ArrayAdapter<String> goalAdapter;
     private DataBase db;
     private int userId;
     private SharedPreferences sharedPreferences;
@@ -34,7 +39,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_goal_setting);
 
         final DrawerLayout drawerLayout = findViewById(R.id.layoutDrawer);
 
@@ -50,15 +55,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewFullNameHeader = headerView.findViewById(R.id.fullName);
         TextView textViewUsernameHeader = headerView.findViewById(R.id.userName);
 
-        textViewFullName = findViewById(R.id.textViewFullName);
-        textViewUsername = findViewById(R.id.textViewUsername);
-        editTextWeight = findViewById(R.id.editTextWeight);
-        buttonSaveWeight = findViewById(R.id.buttonSaveWeight);
-        textViewCalories = findViewById(R.id.textViewCalories);
-        textViewSteps = findViewById(R.id.textViewSteps);
-        textViewPlan = findViewById(R.id.textViewPlan);
-        textViewGoals = findViewById(R.id.textViewGoals);
-
         db = new DataBase(this);
 
         // Lade Benutzerdaten aus SharedPreferences
@@ -67,33 +63,13 @@ public class MainActivity extends AppCompatActivity {
         String firstName = sharedPreferences.getString("firstName", "First Name");
         String lastName = sharedPreferences.getString("lastName", "Last Name");
         String userName = sharedPreferences.getString("userName", "Username");
-        String weight = sharedPreferences.getString("weight", "Not set");
 
         // Kombiniere Vor- und Nachnamen
         String fullName = firstName + " " + lastName;
 
         // Setze die TextViews mit den Benutzerdaten
-        textViewFullName.setText(fullName);
-        textViewUsername.setText(userName);
         textViewFullNameHeader.setText(fullName);
         textViewUsernameHeader.setText(userName);
-        editTextWeight.setText(weight);
-
-        buttonSaveWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newWeight = editTextWeight.getText().toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("weight", newWeight);
-                editor.apply();
-                Toast.makeText(MainActivity.this, "Gewicht gespeichert", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        updateCalories();
-        updateSteps();
-        updatePlan();
-        updateGoals();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -106,25 +82,25 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.menuCaloriesTracker) {
                     // Kalorien-Tracker starten
-                    Intent intent = new Intent(MainActivity.this, CaloriesTrackerActivity.class);
+                    Intent intent = new Intent(GoalSettingActivity.this, CaloriesTrackerActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (itemId == R.id.menuStepCounter) {
                     // Schrittzähler starten
-                    Intent intent = new Intent(MainActivity.this, StepCounterActivity.class);
+                    Intent intent = new Intent(GoalSettingActivity.this, StepCounterActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (itemId == R.id.menuTrainingPlan) {
                     // Trainingsplan starten
-                    Intent intent = new Intent(MainActivity.this, TrainingPlanActivity.class);
+                    Intent intent = new Intent(GoalSettingActivity.this, TrainingPlanActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
-                } else if (itemId == R.id.menuGoalSetting) {
-                    // Zielesetzer starten
-                    Intent intent = new Intent(MainActivity.this, GoalSettingActivity.class);
+                } else if (itemId == R.id.menuProfile) {
+                    // MainActivity starten
+                    Intent intent = new Intent(GoalSettingActivity.this, MainActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
@@ -133,32 +109,53 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // UI-Elemente mit ihren XML-IDs verbinden
+        editTextGoal = findViewById(R.id.editTextGoal);
+        buttonAddGoal = findViewById(R.id.buttonAddGoal);
+        listViewGoals = findViewById(R.id.listViewGoals);
+
+        // Initialisieren der Zielliste
+        goalList = new ArrayList<>();
+        goalAdapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, goalList);
+        listViewGoals.setAdapter(goalAdapter);
+
+        // Button-Klick-Listener für das Hinzufügen von Zielen
+        buttonAddGoal.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addGoal();
+            }
+        });
+
+        // Lange Klick-Listener für das Entfernen von Zielen
+        listViewGoals.setOnItemLongClickListener((parent, view, position, id) -> {
+            removeGoal(position);
+            return true;
+        });
     }
 
-    private void updateCalories() {
-        // Kalorienverbrauch für den aktuellen Tag aus der Datenbank abrufen und anzeigen
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        int calories = db.getTotalCalories(userId, currentDate);
-        textViewCalories.setText("Zugenommene Kalorien heute: " + calories);
+    // Methode zum Hinzufügen eines Ziels
+    private void addGoal() {
+        String goal = editTextGoal.getText().toString();
+
+        // Überprüfen, ob das Zielfeld nicht leer ist
+        if (goal.isEmpty()) {
+            Toast.makeText(this, "Bitte ein Ziel eingeben", Toast.LENGTH_SHORT).show();
+        } else {
+            // Ziel zur Liste hinzufügen und Adapter benachrichtigen
+            goalList.add(goal);
+            goalAdapter.notifyDataSetChanged();
+            editTextGoal.setText(""); // Eingabefeld leeren
+            Toast.makeText(this, "Ziel hinzugefügt", Toast.LENGTH_SHORT).show();
+        }
     }
 
-    private void updateSteps() {
-        // Schrittanzahl für den aktuellen Tag aus der Datenbank abrufen und anzeigen
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        int steps = db.getSteps(userId, currentDate);
-        textViewSteps.setText("Zurückgelegte Schritte heute: " + steps);
-    }
-
-    private void updatePlan() {
-        // Trainingsplan für den Benutzer abrufen und anzeigen
-        String planDetails = db.getTrainingPlan(userId);
-        textViewPlan.setText("Dein Trainingsplan: " + planDetails);
-    }
-
-    private void updateGoals() {
-        // Ziele für den Benutzer abrufen und anzeigen
-        String goals = db.getGoals(userId);
-        textViewGoals.setText("Deine Ziele: " + goals);
+    // Methode zum Entfernen eines Ziels
+    private void removeGoal(int position) {
+        goalList.remove(position);
+        goalAdapter.notifyDataSetChanged();
+        Toast.makeText(this, "Ziel entfernt", Toast.LENGTH_SHORT).show();
     }
 
     private void logOut() {

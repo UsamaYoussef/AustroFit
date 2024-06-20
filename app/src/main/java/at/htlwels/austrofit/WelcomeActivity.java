@@ -9,17 +9,17 @@ import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.graphics.Insets;
-import androidx.core.view.ViewCompat;
-import androidx.core.view.WindowInsetsCompat;
 
 public class WelcomeActivity extends AppCompatActivity {
 
-    Button buttonLogIn, signUp;
+    // UI-Elemente deklarieren
+    private Button buttonLogIn, signUp;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Aktiviert Edge-to-Edge-Display-Modus
         EdgeToEdge.enable(this);
 
         // Überprüfe, ob der Benutzer angemeldet ist
@@ -30,30 +30,35 @@ public class WelcomeActivity extends AppCompatActivity {
             // Wenn der Benutzer angemeldet ist, starte die MainActivity
             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
             startActivity(intent);
-            finish();
+            finish(); // Schließe die aktuelle Aktivität
         } else {
-            // Wenn der Benutzer nicht angemeldet ist, starte die WelcomeActivity
+            // Wenn der Benutzer nicht angemeldet ist, zeige die WelcomeActivity an
             setContentView(R.layout.activity_welcome);
         }
 
+        // UI-Elemente mit ihren XML-IDs verbinden
         buttonLogIn = findViewById(R.id.buttonLogIn);
         signUp = findViewById(R.id.buttonSignIn);
 
+        // Klick-Listener für den Sign-Up-Button
         signUp.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Starte die SignUp-Aktivität
                 Intent intent = new Intent(getApplicationContext(), SignUp.class);
                 startActivity(intent);
-                finish();
+                finish(); // Schließe die aktuelle Aktivität
             }
         });
 
+        // Klick-Listener für den Log-In-Button
         buttonLogIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                // Starte die LogIn-Aktivität
                 Intent intent = new Intent(getApplicationContext(), LogIn.class);
                 startActivity(intent);
-                finish();
+                finish(); // Schließe die aktuelle Aktivität
             }
         });
     }

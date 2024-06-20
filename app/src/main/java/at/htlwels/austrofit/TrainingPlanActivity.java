@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -18,15 +20,14 @@ import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.navigation.NavigationView;
 
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.Locale;
+public class TrainingPlanActivity extends AppCompatActivity {
 
-public class MainActivity extends AppCompatActivity {
+    // UI-Elemente deklarieren
+    private EditText editTextExercise, editTextReps, editTextSets;
+    private Spinner spinnerDay;
+    private Button buttonSave, buttonShowTodayPlan;
 
-    private TextView textViewFullName, textViewUsername, textViewCalories, textViewSteps, textViewPlan, textViewGoals;
-    private EditText editTextWeight;
-    private Button buttonSaveWeight;
+    // Datenbank-Helferklasse
     private DataBase db;
     private int userId;
     private SharedPreferences sharedPreferences;
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_training_plan);
 
         final DrawerLayout drawerLayout = findViewById(R.id.layoutDrawer);
 
@@ -50,15 +51,6 @@ public class MainActivity extends AppCompatActivity {
         TextView textViewFullNameHeader = headerView.findViewById(R.id.fullName);
         TextView textViewUsernameHeader = headerView.findViewById(R.id.userName);
 
-        textViewFullName = findViewById(R.id.textViewFullName);
-        textViewUsername = findViewById(R.id.textViewUsername);
-        editTextWeight = findViewById(R.id.editTextWeight);
-        buttonSaveWeight = findViewById(R.id.buttonSaveWeight);
-        textViewCalories = findViewById(R.id.textViewCalories);
-        textViewSteps = findViewById(R.id.textViewSteps);
-        textViewPlan = findViewById(R.id.textViewPlan);
-        textViewGoals = findViewById(R.id.textViewGoals);
-
         db = new DataBase(this);
 
         // Lade Benutzerdaten aus SharedPreferences
@@ -67,33 +59,13 @@ public class MainActivity extends AppCompatActivity {
         String firstName = sharedPreferences.getString("firstName", "First Name");
         String lastName = sharedPreferences.getString("lastName", "Last Name");
         String userName = sharedPreferences.getString("userName", "Username");
-        String weight = sharedPreferences.getString("weight", "Not set");
 
         // Kombiniere Vor- und Nachnamen
         String fullName = firstName + " " + lastName;
 
         // Setze die TextViews mit den Benutzerdaten
-        textViewFullName.setText(fullName);
-        textViewUsername.setText(userName);
         textViewFullNameHeader.setText(fullName);
         textViewUsernameHeader.setText(userName);
-        editTextWeight.setText(weight);
-
-        buttonSaveWeight.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String newWeight = editTextWeight.getText().toString();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString("weight", newWeight);
-                editor.apply();
-                Toast.makeText(MainActivity.this, "Gewicht gespeichert", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        updateCalories();
-        updateSteps();
-        updatePlan();
-        updateGoals();
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -106,25 +78,25 @@ public class MainActivity extends AppCompatActivity {
                     return true;
                 } else if (itemId == R.id.menuCaloriesTracker) {
                     // Kalorien-Tracker starten
-                    Intent intent = new Intent(MainActivity.this, CaloriesTrackerActivity.class);
+                    Intent intent = new Intent(TrainingPlanActivity.this, CaloriesTrackerActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (itemId == R.id.menuStepCounter) {
                     // Schrittzähler starten
-                    Intent intent = new Intent(MainActivity.this, StepCounterActivity.class);
-                    startActivity(intent);
-                    drawerLayout.closeDrawer(GravityCompat.START);
-                    return true;
-                } else if (itemId == R.id.menuTrainingPlan) {
-                    // Trainingsplan starten
-                    Intent intent = new Intent(MainActivity.this, TrainingPlanActivity.class);
+                    Intent intent = new Intent(TrainingPlanActivity.this, StepCounterActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
                 } else if (itemId == R.id.menuGoalSetting) {
-                    // Zielesetzer starten
-                    Intent intent = new Intent(MainActivity.this, GoalSettingActivity.class);
+                    // Trainingsplan starten
+                    Intent intent = new Intent(TrainingPlanActivity.this, GoalSettingActivity.class);
+                    startActivity(intent);
+                    drawerLayout.closeDrawer(GravityCompat.START);
+                    return true;
+                } else if (itemId == R.id.menuProfile) {
+                    // MainActivity starten
+                    Intent intent = new Intent(TrainingPlanActivity.this, MainActivity.class);
                     startActivity(intent);
                     drawerLayout.closeDrawer(GravityCompat.START);
                     return true;
@@ -133,32 +105,71 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
+        // UI-Elemente mit ihren XML-IDs verbinden
+        editTextExercise = findViewById(R.id.editTextExercise);
+        editTextReps = findViewById(R.id.editTextReps);
+        editTextSets = findViewById(R.id.editTextSets);
+        spinnerDay = findViewById(R.id.spinnerDay);
+        buttonSave = findViewById(R.id.buttonSave);
+        buttonShowTodayPlan = findViewById(R.id.buttonShowTodayPlan);
+
+        // Adapter für Spinner erstellen und Tage der Woche hinzufügen
+        ArrayAdapter<CharSequence> arrayAdapter = ArrayAdapter.createFromResource(this, R.array.days_of_week, android.R.layout.simple_spinner_item);
+        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerDay.setAdapter(arrayAdapter);
+
+        // Initialisieren der Datenbank-Helferklasse
+        db = new DataBase(this);
+
+        // Benutzer-ID aus SharedPreferences abrufen
+        SharedPreferences sharedPreferences = getSharedPreferences("userPrefs", MODE_PRIVATE);
+        userId = sharedPreferences.getInt("userId", -1);
+
+        // Button-Klick-Listener für das Speichern von Übungen
+        buttonSave.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                saveExercise();
+            }
+        });
+
+        // Button-Klick-Listener für das Anzeigen des heutigen Trainingsplans
+        buttonShowTodayPlan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showTodayPlan();
+            }
+        });
     }
 
-    private void updateCalories() {
-        // Kalorienverbrauch für den aktuellen Tag aus der Datenbank abrufen und anzeigen
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        int calories = db.getTotalCalories(userId, currentDate);
-        textViewCalories.setText("Zugenommene Kalorien heute: " + calories);
+    // Methode zum Speichern einer Übung
+    private void saveExercise() {
+        String exerciseName = editTextExercise.getText().toString();
+        String reps = editTextReps.getText().toString();
+        String sets = editTextSets.getText().toString();
+        String day = spinnerDay.getSelectedItem().toString();
+
+        // Überprüfen, ob alle Felder ausgefüllt sind
+        if (exerciseName.isEmpty() || reps.isEmpty() || sets.isEmpty()) {
+            Toast.makeText(this, "Bitte füllen Sie alle Felder aus", Toast.LENGTH_SHORT).show();
+        } else {
+            // Neue Übung erstellen und zur Datenbank hinzufügen
+            db.addExercise(userId, exerciseName, Integer.parseInt(reps), Integer.parseInt(sets), day);
+            Toast.makeText(this, "Übung gespeichert", Toast.LENGTH_SHORT).show();
+
+            // Felder leeren
+            editTextExercise.setText("");
+            editTextReps.setText("");
+            editTextSets.setText("");
+        }
     }
 
-    private void updateSteps() {
-        // Schrittanzahl für den aktuellen Tag aus der Datenbank abrufen und anzeigen
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-        int steps = db.getSteps(userId, currentDate);
-        textViewSteps.setText("Zurückgelegte Schritte heute: " + steps);
-    }
-
-    private void updatePlan() {
-        // Trainingsplan für den Benutzer abrufen und anzeigen
-        String planDetails = db.getTrainingPlan(userId);
-        textViewPlan.setText("Dein Trainingsplan: " + planDetails);
-    }
-
-    private void updateGoals() {
-        // Ziele für den Benutzer abrufen und anzeigen
-        String goals = db.getGoals(userId);
-        textViewGoals.setText("Deine Ziele: " + goals);
+    // Methode zum Anzeigen des heutigen Trainingsplans
+    private void showTodayPlan() {
+        Intent intent = new Intent(TrainingPlanActivity.this, TodayPlanActivity.class);
+        intent.putExtra("currentDay", spinnerDay.getSelectedItem().toString());
+        startActivity(intent);
     }
 
     private void logOut() {

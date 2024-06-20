@@ -2,4 +2,13 @@
     <string name="app_name">AustroFit</string>
     <string name="logInHere">Sie haben schon ein Konto? <u>Anmelden</u></string>
     <string name="signUpHere">Sie haben noch kein Konto? <u>Registrieren</u></string>
+    <string-array name="days_of_week">
+        <item>Montag</item>
+        <item>Dienstag</item>
+        <item>Mittwoch</item>
+        <item>Donnerstag</item>
+        <item>Freitag</item>
+        <item>Samstag</item>
+        <item>Sonntag</item>
+    </string-array>
 </resources>
